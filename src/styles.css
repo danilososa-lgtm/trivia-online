@@ -1,0 +1,288 @@
+/* ============================================================
+   RESET BÁSICO
+============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1c1c2b;
+  font-family: "Poppins", sans-serif;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   CONTENEDOR PRINCIPAL
+============================================================ */
+
+.app-container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin-bottom: 20px;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   RULETA: TABLERO 2.5D + GIRO
+============================================================ */
+
+.board-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.board-frame {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  aspect-ratio: 1 / 1;
+  margin: auto;
+  border-radius: 1.5rem;
+  padding: 8px;
+
+  /* sombra global */
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  background: radial-gradient(
+    circle at 50% 10%,
+    #3f4b8b 0,
+    #202033 45%,
+    #151520 100%
+  );
+}
+
+/* El tablero que gira como ruleta */
+.board-wheel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.4rem;
+  overflow: hidden;
+
+  transform-origin: 50% 50%;
+  transition: transform 1.4s cubic-bezier(0.17, 0.89, 0.24, 1.2);
+}
+
+/* Imagen base del tablero */
+.board-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================================================
+   EFECTOS: GLOW + PARTÍCULAS
+============================================================ */
+
+.board-effects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Glow según ronda */
+.board-glow {
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* 0 = expectativas (amarillo) */
+.board-glow--round-0 {
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 64, 0.45) 0%,
+    rgba(255, 215, 64, 0) 65%
+  );
+}
+
+/* 1 = contribución (azul) */
+.board-glow--round-1 {
+  background: radial-gradient(
+    circle,
+    rgba(66, 133, 244, 0.45) 0%,
+    rgba(66, 133, 244, 0) 65%
+  );
+}
+
+/* 2 = desafíos (rojo) */
+.board-glow--round-2 {
+  background: radial-gradient(
+    circle,
+    rgba(234, 67, 53, 0.45) 0%,
+    rgba(234, 67, 53, 0) 65%
+  );
+}
+
+.board-glow--round-0,
+.board-glow--round-1,
+.board-glow--round-2 {
+  opacity: 1;
+}
+
+/* Partículas mágicas */
+
+.board-particles {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-size: 260% 260%;
+  opacity: 0.8;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.board-particles--a {
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.06) 0, transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.09) 0, transparent 45%),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.06) 0, transparent 45%);
+  animation: particlesDrift 18s linear infinite;
+}
+
+.board-particles--b {
+  background-image:
+    radial-gradient(circle at 20% 70%, rgba(255, 255, 255, 0.05) 0, transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.08) 0, transparent 45%);
+  animation: particlesDrift2 22s linear infinite;
+}
+
+@keyframes particlesDrift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes particlesDrift2 {
+  0% {
+    background-position: 100% 100%;
+  }
+  50% {
+    background-position: 40% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+/* ============================================================
+   BICICLETAS – GIRAN CON LA RULETA
+============================================================ */
+
+.bike-token {
+  position: absolute;
+  width: 13%;
+  transform: translate(-50%, -50%);
+  transition:
+    top 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    left 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.2s ease;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.7));
+  pointer-events: none;
+}
+
+/* Jugador activo: rebote */
+.bike-token--active {
+  animation: bikeBounce 1.25s ease-in-out infinite;
+}
+
+@keyframes bikeBounce {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -60%) scale(1.08);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .bike-token {
+    width: 17%;
+  }
+}
+
+/* ============================================================
+   BOTONES / INPUTS / HUD
+============================================================ */
+
+button {
+  padding: 12px 22px;
+  border-radius: 10px;
+  border: none;
+  background: #3a3f5c;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background: #4c5270;
+}
+
+input,
+select {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  margin: 6px 0;
+  width: 100%;
+}
+
+.player-item {
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 12px;
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.color-preview {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  margin-right: 8px;
+}
+
+.game-panel {
+  margin-top: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+}
+
+.round-indicator {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
